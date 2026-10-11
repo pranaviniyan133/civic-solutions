@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Civic Solutions — See a Problem? Let's Solve It Together.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --green: #006b2c;
+    --green-2: #00873a;
+    --green-soft: #caead6;
+    --bg: #f8faf8;
+    --surface: #ffffff;
+    --surface-2: #eceeec;
+    --ink: #191c1b;
+    --ink-2: #3e4a3d;
+    --ink-3: #6e7b6c;
+    --border: rgba(189, 202, 186, 0.45);
+    --danger-bg: #ffdad6;
+    --warn-bg: #fef3c7;
+    --warn-ink: #92400e;
+    --ok-bg: #d1fae5;
+    --ok-ink: #065f46;
+    --radius: 12px;
+    --shadow: 0 1px 2px rgba(0,0,0,0.05), 0 4px 6px -4px rgba(0,0,0,0.08);
+    --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+    --serif: "Liberation Serif", "Times New Roman", Georgia, serif;
+    --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+  button, input, select, textarea { font: inherit; }
+  button { cursor: pointer; }
+
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; position: relative; }
+  section { position: relative; overflow: hidden; }
+
+  /* Glows */
+  .glow { position: absolute; border-radius: 9999px; filter: blur(32px); pointer-events: none; }
+  .glow-a { width: 384px; height: 384px; left: -128px; top: -128px; background: rgba(0,107,44,0.10); }
+  .glow-b { width: 384px; height: 384px; right: -128px; top: 50%; background: rgba(211,231,219,0.3); }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 24px; border-radius: 8px; font-size: 14px; font-weight: 600;
+    border: 1px solid transparent; text-decoration: none; transition: all .2s ease;
+  }
+  .btn-primary { background: var(--green); color: #fff; box-shadow: var(--shadow); }
+  .btn-primary:hover { background: #005a25; }
+  .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: rgba(189,202,186,0.6); box-shadow: var(--shadow); }
+  .btn-ghost:hover { border-color: var(--green); color: var(--green); }
+  .btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600;
+    padding: 2px 8px; border-radius: 9999px; white-space: nowrap;
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 4px; padding: 7px 15px;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 9999px;
+    font-size: 11px; font-weight: 600; letter-spacing: .55px; text-transform: uppercase; color: var(--green);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+  }
+  .eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+
+  h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; color: var(--ink); }
+  h1 { font-size: 44px; letter-spacing: -1.1px; line-height: 1.25; }
+  h2 { font-size: 36px; letter-spacing: -0.6px; line-height: 1.2; }
+  h3 { font-family: var(--sans); font-size: 18px; font-weight: 600; line-height: 1.35; }
+  h4 { font-family: var(--sans); font-size: 15px; font-weight: 600; }
+  .section-kicker { font-size: 11px; font-weight: 600; letter-spacing: .55px; text-transform: uppercase; color: var(--green); }
+  .muted { color: var(--ink-2); }
+  .small { font-size: 12px; color: var(--ink-3); }
+
+  /* ===== HERO ===== */
+  .hero { padding: 96px 0; background: var(--bg); }
+  .hero-grid {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 48px; align-items: center;
+  }
+  .hero-left { grid-column: 1 / span 7; display: flex; flex-direction: column; gap: 24px; }
+  .hero-left h1 span.accent {
+    color: var(--green); text-decoration: underline; text-decoration-thickness: 4px;
+    text-decoration-color: rgba(0,107,44,0.2); text-underline-offset: 6px;
+  }
+  .hero-left p.lead { font-size: 16px; color: var(--ink-2); max-width: 576px; line-height: 26px; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding-top: 4px; }
+  .reassure { display: flex; gap: 8px; align-items: center; font-size: 12px; font-style: italic; color: rgba(62,74,61,0.8); }
+  .hero-divider { border-top: 1px solid rgba(189,202,186,0.3); margin-top: 41px; }
+
+  .hero-right { grid-column: 8 / span 5; position: relative; }
+  .hero-image {
+    position: relative; height: 380px; border-radius: 16px; overflow: hidden;
+    background:
+      linear-gradient(to top, rgba(46,49,48,0.6), rgba(46,49,48,0) 50%),
+      linear-gradient(135deg, #7fb89a 0%, #d8c9a3 45%, #5d7f6c 100%);
+    box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+  }
+  .hero-image .img-label {
+    position: absolute; left: 16px; right: 16px; bottom: 16px; display: flex; justify-content: space-between;
+    align-items: center; padding: 6px 12px; border-radius: 8px; background: rgba(46,49,48,0.6);
+    backdrop-filter: blur(6px); color: #fff; font-size: 12px; font-weight: 500;
+  }
+  .float-card {
+    position: absolute; background: rgba(255,255,255,0.95); backdrop-filter: blur(6px);
+    border: 1px solid rgba(189,202,186,0.5); border-radius: 12px; padding: 17px; max-width: 270px;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .float-card.c1 { top: -24px; left: -32px; }
+  .float-card.c2 { bottom: -32px; right: -24px; max-width: 280px; }
+  .float-card .ico {
+    width: 32px; height: 32px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .float-card .ico svg { width: 16px; height: 16px; }
+  .float-card .meta { display: flex; flex-direction: column; gap: 4px; }
+  .float-card .meta small { font-size: 11px; color: var(--ink-2); font-weight: 600; }
+
+  .stats-strip { margin-top: 41px; border-top: 1px solid rgba(189,202,186,0.3); padding-top: 41px; display: flex; flex-direction: column; gap: 12px; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .stat-card {
+    background: #fff; border: 1px solid rgba(189,202,186,0.4); border-radius: 12px; padding: 17px;
+    text-align: center; box-shadow: var(--shadow);
+  }
+  .stat-card .num { font-family: var(--serif); font-weight: 700; font-size: 32px; color: var(--green); line-height: 40px; }
+  .stat-card .label { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 20px; }
+  .stat-card .sub { font-size: 11px; font-weight: 600; color: var(--ink-2); padding-top: 4px; }
+  .stats-note { text-align: center; font-size: 12px; color: var(--ink-3); }
+
+  /* ===== HOW IT WORKS ===== */
+  .how { padding: 96px 0; background: #f2f4f2; }
+  .section-head { max-width: 672px; margin: 0 auto 56px; text-align: center; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+  .section-head p { color: var(--ink-2); max-width: 640px; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .step {
+    background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 25px;
+    display: flex; flex-direction: column; gap: 12px; min-height: 230px; box-shadow: var(--shadow);
+    position: relative;
+  }
+  .step .badge {
+    width: 48px; height: 48px; border-radius: 12px; background: var(--green-soft);
+    display: flex; align-items: center; justify-content: center; color: var(--green);
+  }
+  .step .badge svg { width: 22px; height: 22px; }
+  .step .n { font-size: 11px; font-weight: 700; letter-spacing: .5px; color: var(--ink-3); text-transform: uppercase; margin-top: 8px; }
+  .step p { font-size: 14px; color: var(--ink-2); }
+
+  /* ===== EXISTING ISSUES ===== */
+  .issues { padding: 96px 0; }
+  .issues-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 32px; flex-wrap: wrap; }
+  .issues-head .copy { display: flex; flex-direction: column; gap: 12px; max-width: 631px; }
+  .issues-head p { color: var(--ink-2); }
+  .switch { display: inline-flex; background: var(--surface-2); border-radius: 9999px; padding: 5px; gap: 4px; border: 1px solid var(--border); }
+  .switch button {
+    display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: none; border-radius: 9999px;
+    background: transparent; font-size: 13px; font-weight: 600; color: var(--ink-2);
+  }
+  .switch button.active { background: #fff; color: var(--green); box-shadow: var(--shadow); }
+  .switch svg { width: 13px; height: 13px; }
+
+  .toolbar {
+    background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 17px; margin-bottom: 24px; box-shadow: var(--shadow);
+  }
+  .toolbar-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; }
+  .field-box {
+    position: relative; background: #fff; border: 1px solid rgba(189,202,186,0.8); border-radius: 8px; height: 42px;
+    display: flex; align-items: center;
+  }
+  .field-box input, .field-box select {
+    width: 100%; height: 100%; border: none; outline: none; background: transparent;
+    padding: 0 14px 0 42px; font-size: 14px; color: var(--ink); appearance: none;
+  }
+  .field-box .lead-ico { position: absolute; left: 14px; color: var(--ink-3); width: 15px; height: 15px; }
+  .field-box .chev { position: absolute; right: 14px; pointer-events: none; color: var(--ink-3); width: 10px; height: 6px; }
+  .field-box:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px rgba(0,107,44,0.12); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .chip {
+    padding: 6px 14px; border-radius: 9999px; border: 1px solid var(--border); background: #fff;
+    font-size: 13px; font-weight: 600; color: var(--ink-2); transition: all .15s;
+  }
+  .chip.active, .chip:hover { background: var(--green); color: #fff; border-color: var(--green); }
+
+  .issue-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .issue-card {
+    background: #fff; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow);
+    display: flex; flex-direction: column; transition: transform .2s, box-shadow .2s;
+  }
+  .issue-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .issue-img { position: relative; height: 208px; }
+  .issue-img .tag {
+    position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.95); color: var(--ink);
+    font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px; display: flex; align-items: center; gap: 6px;
+    box-shadow: var(--shadow);
+  }
+  .issue-img .tag i { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+  .issue-img .status {
+    position: absolute; top: 12px; right: 12px; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600;
+    background: rgba(46,49,48,0.7); color: #fff; backdrop-filter: blur(6px);
+  }
+  .issue-body { padding: 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .issue-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-3); }
+  .issue-body h3 { font-family: var(--serif); font-size: 20px; }
+  .issue-body .loc { font-size: 13px; color: var(--ink-2); display: flex; gap: 6px; align-items: center; }
+  .issue-body .desc { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+  .issue-foot {
+    margin: auto 16px 16px; padding-top: 14px; border-top: 1px solid rgba(189,202,186,0.35);
+    display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--ink-2);
+  }
+  .issue-foot button {
+    background: none; border: none; color: var(--green); font-weight: 600; font-size: 13px;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .issue-foot .count { display: inline-flex; align-items: center; gap: 6px; }
+  .issue-foot svg { width: 14px; height: 14px; }
+  .empty { display: none; grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--ink-3); }
+
+  .view-all { display: flex; justify-content: center; margin-top: 40px; }
+  .btn-outline { background: #fff; color: var(--ink); border: 1px solid rgba(189,202,186,0.6); box-shadow: var(--shadow); }
+
+  /* Image placeholders (gradients stand in for the Figma photos) */
+  .img-a { background: linear-gradient(135deg, #8aa79a, #c9b78f 55%, #5e7a68); }
+  .img-b { background: linear-gradient(135deg, #a5b2a0, #d4c7a8 50%, #6e7d6a); }
+  .img-c { background: linear-gradient(135deg, #7d9aa6, #bcc7b5 50%, #55705e); }
+  .img-form { background: linear-gradient(135deg, #6e8f7b, #c8b48a 50%, #456455); }
+  .img-community { background: linear-gradient(135deg, #95a98f, #d9c8a0 55%, #5a6f5f); }
+
+  /* ===== REPORT FORM ===== */
+  .report { padding: 96px 0; background: #f2f4f2; }
+  .report-grid { display: grid; grid-template-columns: 483px 1fr; gap: 40px; align-items: start; }
+  .report-left { display: flex; flex-direction: column; gap: 24px; }
+  .report-left h2 { font-size: 36px; }
+  .report-left p { font-size: 16px; color: var(--ink-2); }
+  .feature-img {
+    position: relative; height: 272px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+  .feature-img .tag {
+    position: absolute; left: 13px; bottom: 13px; background: rgba(46,49,48,0.6); color: #fff;
+    padding: 6px 12px; border-radius: 8px; font-size: 12px; backdrop-filter: blur(6px);
+  }
+  .benefits { display: flex; flex-direction: column; gap: 12px; }
+  .benefit {
+    display: flex; gap: 12px; align-items: center; background: #fff; border: 1px solid var(--border);
+    border-radius: 12px; padding: 9px 14px 9px 9px; box-shadow: var(--shadow);
+  }
+  .benefit .ico { width: 36px; height: 36px; border-radius: 10px; background: var(--green-soft); color: var(--green); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .benefit .ico svg { width: 18px; height: 18px; }
+  .benefit strong { display: block; font-size: 14px; }
+  .benefit span { font-size: 12px; color: var(--ink-2); }
+
+  .form-card {
+    background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 41px; box-shadow: var(--shadow-lg);
+  }
+  .form-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding-bottom: 20px; border-bottom: 1px solid rgba(189,202,186,0.35); }
+  .form-head h3 { font-family: var(--serif); font-size: 26px; }
+  .form-head p { font-size: 14px; color: var(--ink-2); margin-top: 4px; }
+  .form-head .draft { background: var(--surface-2); color: var(--ink-2); font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 8px; white-space: nowrap; }
+
+  form#reportForm { display: flex; flex-direction: column; gap: 22px; margin-top: 24px; }
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field label { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .field label .req { color: #ba1a1a; }
+  .field input {
+    height: 42px; border: 1px solid rgba(189,202,186,0.8); border-radius: 8px; padding: 0 15px;
+    font-size: 14px; color: var(--ink); background: #fff; outline: none; transition: border-color .15s, box-shadow .15s;
+  }
+  .field input::placeholder { color: #9aa698; }
+  .field input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(0,107,44,0.12); }
+  .field input.invalid { border-color: #ba1a1a; }
+  .field .hint { font-size: 12px; color: #ba1a1a; display: none; }
+  .field .hint.show { display: block; }
+
+  .form-actions { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+  .form-actions .btn { justify-content: center; width: 100%; }
+  .note-box { display: none; padding: 14px 16px; border-radius: 10px; font-size: 14px; line-height: 1.5; }
+  .note-box.show { display: block; }
+  .note-box.ok { background: var(--ok-bg); color: var(--ok-ink); }
+  .note-box.err { background: var(--danger-bg); color: #93000a; }
+
+  /* ===== TRACKING ===== */
+  .tracking { padding: 96px 0; }
+  .track-head { max-width: 672px; margin: 0 auto 40px; text-align: center; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+  .track-head p { color: var(--ink-2); }
+  .track-search { max-width: 576px; margin: 0 auto 40px; display: flex; gap: 0; }
+  .track-search .field-box { flex: 1; border-radius: 8px 0 0 8px; border-right: none; }
+  .track-search .field-box input { padding-left: 45px; }
+  .track-search .btn { border-radius: 0 8px 8px 0; }
+  .track-card {
+    background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 41px; box-shadow: var(--shadow-lg);
+  }
+  .track-top { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding-bottom: 32px; border-bottom: 1px solid rgba(189,202,186,0.35); }
+  .track-top .tags { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .track-top h3 { font-family: var(--serif); font-size: 26px; margin-top: 12px; }
+  .track-top .loc { font-size: 13px; color: var(--ink-2); margin-top: 6px; }
+  .track-top .actions { display: flex; gap: 8px; align-items: flex-start; }
+  .track-top .actions .btn { padding: 8px 14px; font-size: 13px; }
+
+  .stepper { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding: 32px 0; position: relative; }
+  .stepper::before { content: ""; position: absolute; top: 37px; left: 12%; right: 12%; height: 2px; background: rgba(189,202,186,0.5); z-index: 0; }
+  .step-s { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 8px; }
+  .step-s .dot {
+    width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; background: #fff; border: 2px solid rgba(189,202,186,0.8); color: var(--ink-3);
+  }
+  .step-s.done .dot { background: var(--green); border-color: var(--green); color: #fff; }
+  .step-s.active .dot { background: #fff; border-color: var(--green); color: var(--green); box-shadow: 0 0 0 4px rgba(0,107,44,0.12); }
+  .step-s .s-tag { font-size: 11px; font-weight: 600; color: var(--ink-3); letter-spacing: .4px; text-transform: uppercase; }
+  .step-s h4 { font-size: 15px; }
+  .step-s p { font-size: 13px; color: var(--ink-2); }
+
+  .authority {
+    background: #f8faf8; border: 1px solid var(--border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px;
+  }
+  .authority-top { display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .authority-top .who { display: flex; gap: 12px; align-items: center; }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--green); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
+  .authority-top .who h4 { font-size: 14px; }
+  .authority-top .who small { font-size: 12px; color: var(--ink-3); }
+  .authority-top .sla { font-size: 12px; font-weight: 600; background: #fff; border: 1px solid var(--border); padding: 6px 12px; border-radius: 8px; color: var(--ink-2); }
+  .authority p { font-size: 14px; color: var(--ink-2); padding-left: 50px; }
+  .authority-foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--ink-2); padding-top: 12px; border-top: 1px solid rgba(189,202,186,0.35); }
+
+  .quick-actions { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 24px; }
+  .quick-actions .links { display: flex; gap: 12px; flex-wrap: wrap; }
+  .quick-actions .btn { padding: 9px 14px; font-size: 13px; }
+  .quick-actions .updated { font-size: 12px; color: var(--ink-3); }
+
+  /* ===== COMMUNITY FEEDBACK ===== */
+  .feedback { padding: 96px 0; background: #f2f4f2; }
+  .fb-grid { display: grid; grid-template-columns: 483px 1fr; gap: 40px; align-items: start; }
+  .fb-left { display: flex; flex-direction: column; gap: 24px; }
+  .fb-left h2 { font-size: 36px; }
+  .fb-left p { font-size: 16px; color: var(--ink-2); }
+  .community-img {
+    position: relative; height: 362px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+  .community-img .caption {
+    position: absolute; left: 13px; right: 13px; bottom: 13px; background: rgba(46,49,48,0.6); color: #fff;
+    padding: 10px 14px; border-radius: 10px; backdrop-filter: blur(6px);
+  }
+  .community-img .caption strong { display: block; font-size: 14px; }
+  .community-img .caption span { font-size: 12px; opacity: .9; }
+
+  .fb-form-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 41px; box-shadow: var(--shadow-lg); }
+  .fb-form-card h3 { font-family: var(--serif); font-size: 26px; }
+  .fb-form-card > p { font-size: 14px; color: var(--ink-2); margin-top: 6px; }
+  .fb-form { display: flex; flex-direction: column; gap: 22px; margin-top: 24px; }
+  .radio-group { display: flex; flex-direction: column; gap: 10px; }
+  .radio-row { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+  .radio-row input { width: 14px; height: 14px; accent-color: var(--green); }
+  .stars { display: flex; gap: 6px; }
+  .stars button { background: none; border: none; color: #c3cbc1; font-size: 22px; line-height: 1; }
+  .stars button.on { color: #f59e0b; }
+  .fb-form textarea {
+    width: 100%; min-height: 84px; border: 1px solid rgba(189,202,186,0.8); border-radius: 8px; padding: 12px 15px;
+    font-size: 14px; resize: vertical; outline: none; color: var(--ink);
+  }
+  .fb-form textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(0,107,44,0.12); }
+  .fb-form .btn { justify-content: center; }
+
+  .testimonials { margin-top: 56px; }
+  .testimonials h3 { text-align: center; font-family: var(--serif); font-size: 28px; margin-bottom: 28px; }
+  .quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .quote {
+    background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 25px; box-shadow: var(--shadow);
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .quote .mark { font-family: var(--serif); font-size: 36px; color: var(--green); line-height: 1; }
+  .quote p { font-size: 15px; color: var(--ink-2); }
+  .quote .who { display: flex; gap: 12px; align-items: center; }
+  .quote .who strong { display: block; font-size: 14px; }
+  .quote .who small { font-size: 12px; color: var(--ink-3); }
+
+  /* ===== FOOTER ===== */
+  footer { background: var(--ink); color: #c9d2c7; padding: 40px 0; font-size: 13px; }
+  footer .row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  footer strong { color: #fff; font-family: var(--serif); font-size: 16px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .hero-left { grid-column: 1 / -1; }
+    .hero-right { grid-column: 1 / -1; margin-top: 16px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .steps { grid-template-columns: repeat(2, 1fr); }
+    .issue-grid { grid-template-columns: repeat(2, 1fr); }
+    .report-grid, .fb-grid { grid-template-columns: 1fr; }
+    .stepper { grid-template-columns: repeat(2, 1fr); row-gap: 32px; }
+    .stepper::before { display: none; }
+  }
+  @media (max-width: 720px) {
+    .container { padding: 0 20px; }
+    h1 { font-size: 34px; }
+    h2 { font-size: 28px; }
+    .hero, .how, .issues, .report, .tracking, .feedback { padding: 64px 0; }
+    .hero-image { height: 280px; }
+    .float-card.c1 { left: 8px; top: -16px; }
+    .float-card.c2 { right: 8px; bottom: -20px; }
+    .stats, .steps, .issue-grid, .quotes { grid-template-columns: 1fr; }
+    .toolbar-row { grid-template-columns: 1fr; }
+    .form-card, .track-card, .fb-form-card { padding: 24px; }
+    .stepper { grid-template-columns: 1fr; }
+    .authority p { padding-left: 0; }
+    .switch { width: 100%; }
+    .switch button { flex: 1; justify-content: center; }
+    .track-search { flex-direction: column; }
+    .track-search .field-box { border-right: 1px solid rgba(189,202,186,0.8); border-radius: 8px; }
+    .track-search .btn { border-radius: 8px; margin-top: 8px; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
+  <div class="glow glow-a"></div>
+  <div class="glow glow-b"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <span class="eyebrow"><span class="dot"></span>Your City. Your Voice. Your Impact.</span>
+        <h1>See a Problem?<br /><span class="accent">Let’s Solve It Together.</span></h1>
+        <p class="lead">Every pothole, overflowing bin, and waterlogged street affects someone's daily life. CIVIC SOLUTIONS gives you a simple way to report local problems, track their progress, and work together towards cleaner, safer communities.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#report">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+            Report an Issue
+          </a>
+          <a class="btn btn-ghost" href="#issues">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            Explore Local Issues
+          </a>
+        </div>
+        <p class="reassure">
+          <svg width="13" height="16" viewBox="0 0 24 24" fill="none" stroke="#006b2c" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          "One report can start a change. A community can make it happen."
+        </p>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-image img-a" role="img" aria-label="Chennai neighbourhood street with local transit and pedestrians">
+          <div class="img-label">
+            <span>📍 Ramapuram Ward 154</span>
+            <span>Live Stream Feed</span>
+          </div>
+        </div>
+        <div class="float-card c1">
+          <div class="ico" style="background: #ffdad6;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ba1a1a" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+          </div>
+          <div class="meta">
+            <span class="pill" style="background:#fef3c7;color:#92400e;">In Progress</span>
+            <strong style="font-size:14px;">Pothole reported</strong>
+            <small>12 residents following</small>
+          </div>
+        </div>
+        <div class="float-card c2">
+          <div class="ico" style="background:#caead6;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#006b2c" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          <div class="meta">
+            <span class="pill" style="background:#d1fae5;color:#065f46;">Resolved</span>
+            <strong style="font-size:14px;">Garbage Cleared</strong>
+            <small>Verified by 28 citizens</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-strip">
+      <div class="stats">
+        <div class="stat-card"><div class="num">1,240+</div><div class="label">Issues Reported</div><div class="sub">Across 3 Municipal Zones</div></div>
+        <div class="stat-card"><div class="num" style="color:#00873a;">860+</div><div class="label">Issues Resolved</div><div class="sub">Certified by Ward Engineers</div></div>
+        <div class="stat-card"><div class="num" style="color:#3e4a3d;">32</div><div class="label">Areas Covered</div><div class="sub">Active Citizen Coalitions</div></div>
+        <div class="stat-card"><div class="num">92%</div><div class="label">Citizen Satisfaction</div><div class="sub">Post-Resolution Audits</div></div>
+      </div>
+      <p class="stats-note">*Design prototype illustrative metrics based on Ward 154, 155, and 156 quarterly datasets.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="how">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-kicker">How it works</span>
+      <h2>From Report to Resolution</h2>
+      <p>Four connected steps keep every complaint visible from the first photo to the final sign-off.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        <div class="n">Step 01</div>
+        <h3>Snap &amp; Submit</h3>
+        <p>Take a clear photo and describe what happened. Your report is recorded with photo proof.</p>
+      </div>
+      <div class="step">
+        <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <div class="n">Step 02</div>
+        <h3>Ward Review</h3>
+        <p>The issue is assigned to the ward junior engineer and added to the inspection roster.</p>
+      </div>
+      <div class="step">
+        <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.1-.6-.6-2.1 2.5-2.5z"/></svg></div>
+        <div class="n">Step 03</div>
+        <h3>Action in Progress</h3>
+        <p>Corrective work orders are dispatched to site crews and progress is shown in real time.</p>
+      </div>
+      <div class="step">
+        <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="m22 4-10 10-3-3"/></svg></div>
+        <div class="n">Step 04</div>
+        <h3>Verified Resolution</h3>
+        <p>Resolved issues are subject to photo verification and citizen sign-off before closing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EXISTING & ONGOING ISSUES ===== -->
+<section class="issues" id="issues">
+  <div class="container">
+    <div class="issues-head">
+      <div class="copy">
+        <span class="section-kicker">Existing &amp; ongoing civic issues</span>
+        <h2>What's Happening Near You</h2>
+        <p>Browse issues reported in your locality and follow their progress.</p>
+      </div>
+      <div class="switch" role="tablist">
+        <button class="active" type="button" data-view="grid">▦ Grid</button>
+        <button type="button" data-view="list">☰ List</button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-row">
+        <div class="field-box">
+          <svg class="lead-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="issueSearch" placeholder="Search by issue, street, or locality..." aria-label="Search issues" />
+        </div>
+        <div class="field-box">
+          <svg class="lead-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <select id="localityFilter" aria-label="Locality">
+            <option value="">Ramapuram (Zone 11)</option>
+            <option value="Ramapuram">Ramapuram</option>
+            <option value="Porur">Porur</option>
+            <option value="Mugalivakkam">Mugalivakkam</option>
+          </select>
+          <svg class="chev" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m1 1 4 4 4-4"/></svg>
+        </div>
+        <div class="field-box">
+          <svg class="lead-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9.5V19l4 2v-8.5z"/></svg>
+          <select id="statusFilter" aria-label="Status">
+            <option value="">All Statuses</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Under Review">Under Review</option>
+            <option value="Resolved">Resolved</option>
+          </select>
+          <svg class="chev" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m1 1 4 4 4-4"/></svg>
+        </div>
+      </div>
+      <div class="chips" id="categoryChips">
+        <button class="chip active" data-cat="">All Issues</button>
+        <button class="chip" data-cat="Roads">Potholes &amp; Roads</button>
+        <button class="chip" data-cat="Waste">Garbage</button>
+        <button class="chip" data-cat="Drainage">Drainage</button>
+        <button class="chip" data-cat="Lighting">Streetlights</button>
+        <button class="chip" data-cat="Water">Water Supply</button>
+        <button class="chip" data-cat="Parks">Parks</button>
+        <button class="chip" data-cat="Other">Other</button>
+      </div>
+    </div>
+
+    <div class="issue-grid" id="issueGrid">
+      <article class="issue-card" data-cat="Roads" data-status="In Progress" data-loc="Ramapuram">
+        <div class="issue-img img-a">
+          <span class="tag"><i></i>Roads</span>
+          <span class="status" style="background:rgba(245,158,11,0.9);">In Progress</span>
+        </div>
+        <div class="issue-body">
+          <div class="issue-meta"><span>CS-1024</span><span>3 days ago</span></div>
+          <h3>Large Pothole on Main Road</h3>
+          <div class="loc">📍 Severe asphalt pothole causing traffic obstruction on Ramapuram Main Road</div>
+          <p class="desc">A damaged stretch of road is causing severe difficulty for daily motorists and two-wheelers during peak hours.</p>
+        </div>
+        <div class="issue-foot">
+          <span class="count">👥 12 following</span>
+          <button type="button">Follow update →</button>
+        </div>
+      </article>
+
+      <article class="issue-card" data-cat="Waste" data-status="Under Review" data-loc="Porur">
+        <div class="issue-img img-b">
+          <span class="tag"><i></i>Garbage</span>
+          <span class="status" style="background:rgba(59,130,246,0.85);">Under Review</span>
+        </div>
+        <div class="issue-body">
+          <div class="issue-meta"><span>CS-1031</span><span>1 day ago</span></div>
+          <h3>Garbage Collection Delayed</h3>
+          <div class="loc">📍 Overflowing municipal garbage dumpster causing roadside hazard in Porur, Chennai</div>
+          <p class="desc">Waste has accumulated near a residential junction, spilling onto pedestrian pathways and creating an odour hazard.</p>
+        </div>
+        <div class="issue-foot">
+          <span class="count">👥 8 following</span>
+          <button type="button">Follow update →</button>
+        </div>
+      </article>
+
+      <article class="issue-card" data-cat="Drainage" data-status="Resolved" data-loc="Mugalivakkam">
+        <div class="issue-img img-c">
+          <span class="tag"><i></i>Drainage</span>
+          <span class="status" style="background:rgba(0,107,44,0.9);">Resolved</span>
+        </div>
+        <div class="issue-body">
+          <div class="issue-meta"><span>CS-1017</span><span>1 week ago</span></div>
+          <h3>Water Stagnation After Rain</h3>
+          <div class="loc">📍 Water stagnation and flooded street blocking pedestrian access in Mugalivakkam, Chennai</div>
+          <p class="desc">Standing rainwater is affecting pedestrian movement and creating mosquito breeding clusters.</p>
+        </div>
+        <div class="issue-foot">
+          <span class="count">👥 21 following</span>
+          <button type="button">Follow update →</button>
+        </div>
+      </article>
+
+      <p class="empty" id="noResults">No issues match your filters yet.</p>
+    </div>
+
+    <div class="view-all">
+      <a class="btn btn-outline" href="#issues">View All Issues →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REPORT A NEW PROBLEM ===== -->
+<section class="report" id="report">
+  <div class="container">
+    <div class="report-grid">
+      <div class="report-left">
+        <span class="section-kicker">Report a new problem</span>
+        <h2>Spot It. Report It. Help Fix It.</h2>
+        <p>You shouldn’t have to spend hours figuring out where to complain about a broken streetlight or a pile of uncollected garbage. Tell us what’s wrong, show us where it is, and submit the details.</p>
+
+        <div class="feature-img img-form" role="img" aria-label="Citizen taking a photo of road damage with a smartphone">
+          <span class="tag">📷 Clear photo of the issue helps us act faster</span>
+        </div>
+
+        <div class="benefits">
+          <div class="benefit">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div><strong>Verified Submissions</strong><span>Every report is recorded with a timestamp and contact.</span></div>
+          </div>
+          <div class="benefit">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div><strong>Pinpoint Location</strong><span>Share your street, landmark, and ward for faster routing.</span></div>
+          </div>
+          <div class="benefit">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="m22 4-10 10-3-3"/></svg></div>
+            <div><strong>Track Every Step</strong><span>Get updates from review through to resolution.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-head">
+          <div>
+            <h3>Report Details</h3>
+            <p>Fill in your details and we will get back to you.</p>
+          </div>
+          <span class="draft">Draft</span>
+        </div>
+
+        <form id="reportForm" novalidate>
+          <div class="field">
+            <label for="name">Name <span class="req">*</span></label>
+            <input type="text" id="name" name="name" placeholder="e.g. Priya Raman" autocomplete="name" required />
+            <span class="hint" id="nameHint">Please enter your name.</span>
+          </div>
+
+          <div class="field">
+            <label for="email">Email <span class="req">*</span></label>
+            <input type="email" id="email" name="email" placeholder="e.g. priya@example.com" autocomplete="email" required />
+            <span class="hint" id="emailHint">Please enter a valid email address.</span>
+          </div>
+
+          <div class="field">
+            <label for="phone">Phone <span class="req">*</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="e.g. +91 98765 43210" autocomplete="tel" required />
+            <span class="hint" id="phoneHint">Please enter a valid phone number.</span>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit" id="submitBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4z"/></svg>
+              Submit Report
+            </button>
+            <div class="note-box ok" id="successBox" role="status">✅ Thank you! Your details have been submitted.</div>
+            <div class="note-box err" id="errorBox" role="alert">⚠️ Something went wrong. Please check your connection and try again.</div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MUNICIPAL RESPONSE & ISSUE TRACKING ===== -->
+<section class="tracking">
+  <div class="container">
+    <div class="track-head">
+      <span class="section-kicker">Municipal response &amp; issue tracking</span>
+      <h2>Follow Any Complaint, Step by Step</h2>
+      <p>Enter a complaint ID to see where it stands with the municipal team.</p>
+    </div>
+
+    <div class="track-search">
+      <div class="field-box">
+        <svg class="lead-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="trackId" value="CS-1024" aria-label="Complaint ID" />
+      </div>
+      <button class="btn btn-primary" type="button" id="trackBtn">Track Issue</button>
+    </div>
+
+    <div class="track-card">
+      <div class="track-top">
+        <div>
+          <div class="tags">
+            <span class="pill" style="background:var(--surface-2);color:var(--ink-2);">CS-1024</span>
+            <span class="pill" style="background:#fef3c7;color:#92400e;">In Progress</span>
+            <span class="small">Reported 3 days ago</span>
+          </div>
+          <h3>Large Pothole on Main Road</h3>
+          <div class="loc">📍 Ramapuram, Ward 154 · Ramapuram Main Road</div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-ghost" type="button">📢 Share Report</button>
+          <button class="btn btn-ghost" type="button" aria-label="More">⋯</button>
+        </div>
+      </div>
+
+      <div class="stepper">
+        <div class="step-s done">
+          <div class="dot">✓</div>
+          <span class="s-tag">Completed</span>
+          <h4>Report Submitted</h4>
+          <p>The issue was recorded on the platform with photo proof.</p>
+        </div>
+        <div class="step-s done">
+          <div class="dot">✓</div>
+          <span class="s-tag">Completed</span>
+          <h4>Under Review</h4>
+          <p>Assigned to Ward 154 Junior Engineer inspection roster.</p>
+        </div>
+        <div class="step-s active">
+          <div class="dot">3</div>
+          <span class="s-tag">Active · In Progress</span>
+          <h4>Action in Progress</h4>
+          <p>Corrective asphalt work order dispatched to site crew.</p>
+        </div>
+        <div class="step-s">
+          <div class="dot">4</div>
+          <span class="s-tag">Pending</span>
+          <h4>Resolved</h4>
+          <p>Subject to photo verification and citizen sign-off.</p>
+        </div>
+      </div>
+
+      <div class="authority">
+        <div class="authority-top">
+          <div class="who">
+            <div class="avatar">WE</div>
+            <div>
+              <h4>Ward 154 Engineering Office</h4>
+              <small>Municipal Authority Response</small>
+            </div>
+          </div>
+          <span class="sla">Target: 7 working days</span>
+        </div>
+        <p>Inspection is scheduled this week. The crew will repair the damaged stretch and share a completion photo before closing this report.</p>
+        <div class="authority-foot">
+          <span>📅 Last updated: Today, 10:30 AM</span>
+          <span>Assigned to: Junior Engineer, Ward 154</span>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <div class="links">
+          <button class="btn btn-ghost" type="button">🔔 Get Updates</button>
+          <button class="btn btn-ghost" type="button">💬 Add Comment</button>
+        </div>
+        <span class="updated">Photo verification and citizen sign-off required before closing.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMMUNITY FEEDBACK ===== -->
+<section class="feedback">
+  <div class="container">
+    <div class="fb-grid">
+      <div class="fb-left">
+        <span class="section-kicker">Community feedback</span>
+        <h2>Your Feedback Makes the Difference.</h2>
+        <p>Civic governance only works when community members check the work on the ground. Tell us if an issue was fixed adequately or if shoddy repairs need to be revisited.</p>
+        <div class="community-img img-community" role="img" aria-label="Residents discussing local civic improvements outdoors">
+          <div class="caption">
+            <strong>Ward 154 Citizen Advisory Circle</strong>
+            <span>Meeting weekly under the banyan tree at Anna Main Rd Park.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="fb-form-card">
+        <h3>Share Your Ground Verification</h3>
+        <p>Help your neighbours know whether the repair was successful.</p>
+        <div class="fb-form">
+          <div class="field">
+            <label>Select Issue Report *</label>
+            <select class="fb-select" style="height:42px;border:1px solid rgba(189,202,186,0.8);border-radius:8px;padding:0 15px;font-size:14px;background:#fff;">
+              <option>CS-1024 - Large Pothole on Main Road (Ramapuram)</option>
+              <option>CS-1031 - Garbage Collection Delayed (Porur)</option>
+              <option>CS-1017 - Water Stagnation After Rain (Mugalivakkam)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Has the problem been fixed? *</label>
+            <div class="radio-group">
+              <label class="radio-row"><input type="radio" name="fixed" /> Yes, fully fixed</label>
+              <label class="radio-row"><input type="radio" name="fixed" /> Partially fixed</label>
+              <label class="radio-row"><input type="radio" name="fixed" /> No, still an issue</label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Quality of Municipal Response</label>
+            <div class="stars" id="stars">
+              <button type="button" aria-label="1 star">★</button>
+              <button type="button" aria-label="2 stars">★</button>
+              <button type="button" aria-label="3 stars">★</button>
+              <button type="button" aria-label="4 stars">★</button>
+              <button type="button" aria-label="5 stars">★</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Written Observations</label>
+            <textarea placeholder="Share details on road leveling, cleanliness, or remaining hazard..."></textarea>
+          </div>
+
+          <button class="btn btn-primary" type="button">✈ Submit Feedback</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonials">
+      <h3>What Residents Are Saying</h3>
+      <div class="quotes">
+        <div class="quote">
+          <span class="mark">“</span>
+          <p>A place to report waste collection problems makes it easier for residents to bring attention to issues in their area without traveling repeatedly to zonal headquarters.</p>
+          <div class="who"><div class="avatar">RS</div><div><strong>Ramesh S.</strong><small>Ramapuram resident</small></div></div>
+        </div>
+        <div class="quote">
+          <span class="mark">“</span>
+          <p>Being able to follow a complaint step-by-step helps residents understand whether it has been officially acknowledged and what happens next in real time.</p>
+          <div class="who"><div class="avatar">LN</div><div><strong>Lakshmi N.</strong><small>Porur resident</small></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container row">
+    <div><strong>CIVIC SOLUTIONS</strong><br />Making local government work for everyone.</div>
+    <div>© 2026 Civic Solutions · Ward 154, Ramapuram</div>
+  </div>
+</footer>
+
+<script>
+  // ---------- Apps Script endpoint (deployed Web app URL) ----------
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby72LFqSJJLfWuSZFde1u_sSuScc4mbzv9kBW2hAwbssnr2pMJpsPBMB69nEYH8qICX/exec";
+
+  // ---------- Report form ----------
+  const form = document.getElementById("reportForm");
+  const submitBtn = document.getElementById("submitBtn");
+  const successBox = document.getElementById("successBox");
+  const errorBox = document.getElementById("errorBox");
+
+  const nameInput = document.getElementById("name");
+  const emailInput = document.getElementById("email");
+  const phoneInput = document.getElementById("phone");
+
+  function showSuccess() {
+    successBox.classList.add("show");
+    errorBox.classList.remove("show");
+    form.reset();
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Report";
+  }
+
+  function showError() {
+    errorBox.classList.add("show");
+    successBox.classList.remove("show");
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Report";
+  }
+
+  function setInvalid(input, hintId, invalid) {
+    input.classList.toggle("invalid", invalid);
+    document.getElementById(hintId).classList.toggle("show", invalid);
+  }
+
+  function validate() {
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const phone = phoneInput.value.trim();
+
+    const nameOk = name.length > 0;
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const phoneOk = /^\+?[0-9\s\-()]{7,20}$/.test(phone);
+
+    setInvalid(nameInput, "nameHint", !nameOk);
+    setInvalid(emailInput, "emailHint", !emailOk);
+    setInvalid(phoneInput, "phoneHint", !phoneOk);
+
+    return nameOk && emailOk && phoneOk;
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    successBox.classList.remove("show");
+    errorBox.classList.remove("show");
+
+    if (!validate()) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting…";
+
+    const params = new URLSearchParams({
+      name: nameInput.value.trim(),
+      email: emailInput.value.trim(),
+      phone: phoneInput.value.trim()
+    });
+    const url = SCRIPT_URL + "?" + params.toString();
+
+    fetch(url, { method: "GET", mode: "no-cors" })
+      .then(() => showSuccess())
+      .catch(() => showError());
+  });
+
+  // ---------- Issue filters ----------
+  const issueCards = Array.from(document.querySelectorAll(".issue-card"));
+  const searchInput = document.getElementById("issueSearch");
+  const localityFilter = document.getElementById("localityFilter");
+  const statusFilter = document.getElementById("statusFilter");
+  const chips = Array.from(document.querySelectorAll("#categoryChips .chip"));
+  const noResults = document.getElementById("noResults");
+  let activeCat = "";
+
+  function applyFilters() {
+    const q = searchInput.value.trim().toLowerCase();
+    const loc = localityFilter.value;
+    const status = statusFilter.value;
+    let shown = 0;
+
+    issueCards.forEach(card => {
+      const text = card.textContent.toLowerCase();
+      const match =
+        (!q || text.includes(q)) &&
+        (!loc || card.dataset.loc === loc) &&
+        (!status || card.dataset.status === status) &&
+        (!activeCat || card.dataset.cat === activeCat);
+      card.style.display = match ? "" : "none";
+      if (match) shown++;
+    });
+    noResults.style.display = shown === 0 ? "block" : "none";
+  }
+
+  searchInput.addEventListener("input", applyFilters);
+  localityFilter.addEventListener("change", applyFilters);
+  statusFilter.addEventListener("change", applyFilters);
+
+  chips.forEach(chip => {
+    chip.addEventListener("click", () => {
+      chips.forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      activeCat = chip.dataset.cat;
+      applyFilters();
+    });
+  });
+
+  // ---------- Grid / list toggle ----------
+  const grid = document.getElementById("issueGrid");
+  document.querySelectorAll(".switch button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".switch button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      grid.style.gridTemplateColumns = btn.dataset.view === "list" ? "1fr" : "";
+    });
+  });
+
+  // ---------- Star rating ----------
+  const stars = Array.from(document.querySelectorAll("#stars button"));
+  stars.forEach((star, i) => {
+    star.addEventListener("click", () => {
+      stars.forEach((s, j) => s.classList.toggle("on", j <= i));
+    });
+  });
+</script>
+</body>
+</html>
